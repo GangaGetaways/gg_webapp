@@ -2,7 +2,7 @@ pipeline {
 
     agent any
     tools {
-        nodejs "nodejs"
+        nodejs 'node-js-installer'
     }
     environment {
         // Successful Deploy to server after manually adding public key to authorized keys and accepting fingerprint once inside docker container jenkins"
