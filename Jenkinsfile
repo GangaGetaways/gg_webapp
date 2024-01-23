@@ -1,7 +1,9 @@
 pipeline {
 
     agent any
-
+    tools {
+        nodejs "nodejs"
+    }
     environment {
         // Successful Deploy to server after manually adding public key to authorized keys and accepting fingerprint once inside docker container jenkins"
         // Set environment variables here (if needed)
@@ -23,6 +25,7 @@ pipeline {
           stage('DEBUG::Print npm Version') {
               steps {
                   script {
+                      sh 'npm config ls'
                       sh 'npm --version'
                   }
               }
