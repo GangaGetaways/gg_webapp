@@ -15,7 +15,8 @@ pipeline {
         DOCKER_IMAGE_TAG = 'latest'
         DOCKER_IMAGE_REPO = 'hanisntsolo/gg-webapp'
         GITHUB_ACCESS_TOKEN = 'github-token'
-        DEV_BRANCHES = ["dev", "feature/*"]
+        FEATURE_BRANCH = "feature/*"
+        DEV_BRANCH = "dev"
     }
 
     stages {
@@ -69,7 +70,11 @@ pipeline {
                                 ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker network create gangagetaways-network'
                             fi
                         """
-                        if (BRANCH_NAME in DEV_BRANCHES) {
+                        if (BRANCH_NAME == FEATURE_BRANCH) {
+                            // Deploy to feature-development environment for specific branches
+                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop gg-webapp-feat || true && docker rm gg-webapp-dev || true'"
+                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13000:13000 --name gg-webapp-feat $IMAGE_NAME'"
+                        } else if (BRANCH_NAME == DEV_BRANCH) {
                             // Deploy to development environment for specific branches
                             sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop gg-webapp-dev || true && docker rm gg-webapp-dev || true'"
                             sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13001:13001 --name gg-webapp-dev $IMAGE_NAME'"
@@ -78,7 +83,7 @@ pipeline {
                             sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop gg-webapp-uat || true && docker rm gg-webapp-uat || true'"
                             sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13002:13002 --name gg-webapp-uat $IMAGE_NAME'"
                         } else if (BRANCH_NAME == 'release') {
-                            // Deploy to Prod environment for master branch
+                            // Deploy to Prod environment for release branch
                             sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop gg-webapp-prod || true && docker rm gg-webapp-prod || true'"
                             sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13003:13003 --name gg-webapp-prod $IMAGE_NAME'"
                         } else {
