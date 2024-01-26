@@ -80,23 +80,23 @@ pipeline {
                         if (env.GIT_BRANCH ==~ /.*feature.*/) {
                             // Deploy to feature-development environment for specific branches
                             def featureImageName = "${IMAGE_NAME}-feat"
-                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop gg-webapp-feat || true && docker rm gg-webapp-dev || true'"
-                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13000:13000 --name gg-webapp-feat $featureImageName'"
+                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop gg-webapp-feat || true && docker rm gg-webapp-feat || true'"
+                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13000:13000 --name gg-webapp-feat $IMAGE_NAME'"
                         } else if (env.GIT_BRANCH ==~ /.*dev.*/) {
                             // Deploy to development environment for specific branches
                             def devImageName = "${IMAGE_NAME}-dev"
                             sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop gg-webapp-dev || true && docker rm gg-webapp-dev || true'"
-                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13001:13001 --name gg-webapp-dev $devImageName'"
+                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13001:13001 --name gg-webapp-dev $IMAGE_NAME'"
                         } else if (env.GIT_BRANCH ==~ /.*master.*/) {
                             // Deploy to UAT environment for master branch
                             def uatImageName = "${IMAGE_NAME}-uat"
                             sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop gg-webapp-uat || true && docker rm gg-webapp-uat || true'"
-                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13002:13002 --name gg-webapp-uat $uatImageName'"
+                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13002:13002 --name gg-webapp-uat $IMAGE_NAME'"
                         } else if (env.GIT_BRANCH ==~ /.*release.*/) {
                             // Deploy to Prod environment for release branch
                             def prodImageName = "${IMAGE_NAME}-prod"
                             sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop gg-webapp-prod || true && docker rm gg-webapp-prod || true'"
-                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13003:13003 --name gg-webapp-prod $prodImageName'"
+                            sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network gangagetaways-network -d -p 13003:13003 --name gg-webapp-prod $IMAGE_NAME'"
                         } else {
                             echo "Skipping deployment for branch: $env.GIT_BRANCH"
                         }
