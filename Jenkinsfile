@@ -15,7 +15,7 @@ pipeline {
         DOCKER_IMAGE_TAG = 'latest'
         DOCKER_IMAGE_REPO = 'hanisntsolo/gg-webapp'
         GITHUB_ACCESS_TOKEN = 'github-token'
-        DEV_BRANCHES = ['dev', 'feature/*']
+        DEV_BRANCHES = ["dev", "feature/*"]
     }
 
     stages {
