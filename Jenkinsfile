@@ -31,6 +31,19 @@ pipeline {
         stage('Printenv') {
             steps {
                 sh 'printenv'
+                // Variable definition
+                // Testing area
+                // script {
+                //     def awkCommand = '''\
+                //             awk '{print $1}'
+                //         '''
+
+                // // Statement to explicitly handle container removal via port
+                // echo "Removing old container via port selector in case of new feature branches: 13000"
+                // sh """
+                //     ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP "docker rm -f \$(docker ps | grep 13000 | $awkCommand)" || true
+                // """
+                // }
             }
         }
 
@@ -79,7 +92,9 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'cloud-ssh-id', keyFileVariable: 'SSH_KEY')]) {
                         echo "Starting deployment for branch: $env.GIT_BRANCH"
                         def branchName = env.GIT_BRANCH
-
+                        def awkCommand = '''\
+                            awk '{print $1}'
+                            '''
                         // Derive Docker container name and network name from branch name
                         def containerName = "${APP_NAME}-${branchName.replaceAll('/', '-')}"
                         def networkName = "gangagetaways-network-${branchName.replaceAll('/', '-')}"
@@ -96,6 +111,11 @@ pipeline {
                         } else if (branchName ==~ /.*release.*/) {
                             portNumber = 13003
                         }
+                        // Statement to explicity handle container removal via port ::
+                        echo "Removing old container via port selector in case of new feature branches : $portNumber"
+                        sh """
+                            ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP "docker rm -f \$(docker ps | grep $portNumber | $awkCommand)" || true
+                        """
                         // Stop and Remove old container
                         echo "Removing old container : $containerName"
                         sh "echo 'DEBUG::Stopping and removing existing Docker container on server ...'"
