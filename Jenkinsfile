@@ -133,7 +133,7 @@ pipeline {
                         """
 
                         // Deploy Docker container to the specified network and port
-                        sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network $networkName -d -p $portNumber:13000 --name $containerName $DOCKER_IMAGE_REPO:$DOCKER_IMAGE_TAG'"
+                        sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker run --restart always --network $networkName -d -p $portNumber:12999 --name $containerName $DOCKER_IMAGE_REPO:$DOCKER_IMAGE_TAG'"
                     }
                 }
             }
