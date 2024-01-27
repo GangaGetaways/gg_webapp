@@ -79,7 +79,9 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'cloud-ssh-id', keyFileVariable: 'SSH_KEY')]) {
                         echo "Starting deployment for branch: $env.GIT_BRANCH"
                         def branchName = env.GIT_BRANCH
-
+                        def awkCommand = '''\
+                            awk '{print $1}'
+                            '''
                         // Derive Docker container name and network name from branch name
                         def containerName = "${APP_NAME}-${branchName.replaceAll('/', '-')}"
                         def networkName = "gangagetaways-network-${branchName.replaceAll('/', '-')}"
@@ -99,7 +101,7 @@ pipeline {
                         // Statement to explicity handle container removal via port ::
                         echo "Removing old container via port selector in case of new feature branches : $portNumber"
                         sh """
-                            ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker rm -f \$(docker ps | grep $portNumber | awk \'\{print \$1\}\') || true'
+                            ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker rm -f \$(docker ps | grep $portNumber | $awkCommand || true'
                         """
                         // Stop and Remove old container
                         echo "Removing old container : $containerName"
