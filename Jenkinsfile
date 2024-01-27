@@ -31,6 +31,16 @@ pipeline {
         stage('Printenv') {
             steps {
                 sh 'printenv'
+                // Variable definition
+            def awkCommand = '''\
+                awk '{print $1}'
+            '''
+
+            // Statement to explicitly handle container removal via port
+            echo "Removing old container via port selector in case of new feature branches: 13000"
+            sh """
+                ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP "docker rm -f \$(docker ps | grep 13000 | $awkCommand)" || true
+            """
             }
         }
 
@@ -101,7 +111,7 @@ pipeline {
                         // Statement to explicity handle container removal via port ::
                         echo "Removing old container via port selector in case of new feature branches : $portNumber"
                         sh """
-                            ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker rm -f \$(docker ps | grep $portNumber | $awkCommand)' || true'
+                            ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP "docker rm -f \$(docker ps | grep $portNumber | $awkCommand)" || true
                         """
                         // Stop and Remove old container
                         echo "Removing old container : $containerName"
