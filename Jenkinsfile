@@ -1,8 +1,15 @@
 pipeline {
+
     agent any
+
     tools {
         nodejs 'node-js-installer'
     }
+
+    parameters {
+        string(name: 'DOCKER_IMAGE_TAG', defaultValue: 'latest', description: 'Specify the Docker image tag')
+    }
+    
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
         SERVER_SSH_CREDENTIALS = credentials('cloud-ssh-id')
@@ -12,11 +19,13 @@ pipeline {
         SERVER_DESTINATION_FOLDER = '/docker/lab/deployed'
         SSH_KEY = credentials('cloud-ssh-id')
         APP_NAME = 'gg-webapp'
-        DOCKER_IMAGE_TAG = 'latest'
+        // DOCKER_IMAGE_TAG = 'latest'
+        DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
         DOCKER_IMAGE_REPO = 'hanisntsolo/gg-webapp'
         GITHUB_ACCESS_TOKEN = 'github-token'
         FEATURE_BRANCH = "feature/*"
         DEV_BRANCH = "dev"
+        DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
@@ -50,7 +59,7 @@ pipeline {
             steps {
                 script {
                     sh 'echo "DOCKER_BUILD_STEP::Building Application $APP_NAME Image Using Docker ..."'
-                    sh "docker build -t $IMAGE_NAME ."
+                    sh "docker build -t $IMAGE_NAME:$DOCKER_IMAGE_TAG ."
                 }
             }
         }
