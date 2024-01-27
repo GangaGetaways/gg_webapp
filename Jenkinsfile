@@ -32,17 +32,18 @@ pipeline {
             steps {
                 sh 'printenv'
                 // Variable definition
-                script {
-                    def awkCommand = '''\
-                            awk '{print $1}'
-                        '''
+                // Testing area
+                // script {
+                //     def awkCommand = '''\
+                //             awk '{print $1}'
+                //         '''
 
-                // Statement to explicitly handle container removal via port
-                echo "Removing old container via port selector in case of new feature branches: 13000"
-                sh """
-                    ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP "docker rm -f \$(docker ps | grep 13000 | $awkCommand)" || true
-                """
-                }
+                // // Statement to explicitly handle container removal via port
+                // echo "Removing old container via port selector in case of new feature branches: 13000"
+                // sh """
+                //     ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP "docker rm -f \$(docker ps | grep 13000 | $awkCommand)" || true
+                // """
+                // }
             }
         }
 
