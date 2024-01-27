@@ -96,6 +96,9 @@ pipeline {
                         } else if (branchName ==~ /.*release.*/) {
                             portNumber = 13003
                         }
+                        // Remove old Docker networks
+                        echo "Removing old network : $networkName"
+                        sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker network rm $networkName || true'"
 
                         sh "echo 'DEBUG::Stopping and removing existing Docker container on server ...'"
                         sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop $containerName || true && docker rm $containerName || true'"
