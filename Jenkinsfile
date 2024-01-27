@@ -9,7 +9,7 @@ pipeline {
     parameters {
         string(name: 'DOCKER_IMAGE_TAG', defaultValue: 'latest', description: 'Specify the Docker image tag')
     }
-    
+
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
         SERVER_SSH_CREDENTIALS = credentials('cloud-ssh-id')
@@ -25,7 +25,6 @@ pipeline {
         GITHUB_ACCESS_TOKEN = 'github-token'
         FEATURE_BRANCH = "feature/*"
         DEV_BRANCH = "dev"
-        DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
