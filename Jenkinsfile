@@ -96,12 +96,14 @@ pipeline {
                         } else if (branchName ==~ /.*release.*/) {
                             portNumber = 13003
                         }
+                        // Stop and Remove old container
+                        echo "Removing old container : $containerName"
+                        sh "echo 'DEBUG::Stopping and removing existing Docker container on server ...'"
+                        sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop $containerName || true && docker rm $containerName || true'"
                         // Remove old Docker networks
                         echo "Removing old network : $networkName"
                         sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker network rm $networkName || true'"
-
-                        sh "echo 'DEBUG::Stopping and removing existing Docker container on server ...'"
-                        sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker stop $containerName || true && docker rm $containerName || true'"
+                        
                         
                         // Create gangagetaways-network if not present already
                         sh """
