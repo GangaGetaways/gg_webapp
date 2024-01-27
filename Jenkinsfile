@@ -99,7 +99,7 @@ pipeline {
                         // Statement to explicity handle port removal ::
                         echo "Removing old container via port selector in case of new feature branches : $portNumber"
                         sh """
-                            ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker rm -f \$(docker ps -q --format="{{.Ports}}" | grep $portNumber | awk -F':' '{print \$2}' | awk '{print \$1}') || true'
+                            ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker rm -f \$(docker ps -q --format="{{.Ports}}" | grep $portNumber | awk -F: '{print \$2}' | awk '{print \$1}') || true'
                         """
                         // Stop and Remove old container
                         echo "Removing old container : $containerName"
