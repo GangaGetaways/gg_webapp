@@ -96,6 +96,9 @@ pipeline {
                         } else if (branchName ==~ /.*release.*/) {
                             portNumber = 13003
                         }
+                        // Statement to explicity handle port removal ::
+                        echo "Removing old container via port selector in case of new feature branches : $portNumber"
+                        sh "ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP 'docker rm -f $(docker ps -q -f "port=$portNumber") || true'"
                         // Stop and Remove old container
                         echo "Removing old container : $containerName"
                         sh "echo 'DEBUG::Stopping and removing existing Docker container on server ...'"
