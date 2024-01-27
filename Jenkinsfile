@@ -71,6 +71,7 @@ pipeline {
                 script {
                     sh 'echo "DEPLOY_TO_SINGH_SERVER::Deploying Docker $APP_NAME image to server ..."'
                     withCredentials([sshUserPrivateKey(credentialsId: 'cloud-ssh-id', keyFileVariable: 'SSH_KEY')]) {
+                        echo "Starting deployment for branch: $env.GIT_BRANCH"
                         sh "echo 'DEBUG::Stopping and removing existing Docker container on server ...'"
                         if (env.GIT_BRANCH ==~ /.*feature.*/) {
                             def featureImageName = "${IMAGE_NAME}-feat"
