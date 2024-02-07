@@ -3,19 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 12999",
+    "dev": "cross-env ENV_TYPE=dev next dev -p 12999",
     "build": "next build",
     "start": "next start -p 12999",
     "lint": "next lint"
   },
   "dependencies": {
     "axios": "^1.6.7",
+    "dotenv": "16.4.1",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1"
   },
   "devDependencies": {
+    "cross-env": "7.0.3",
     "eslint": "^8",
     "eslint-config-next": "14.1.0"
   }
