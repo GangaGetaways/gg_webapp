@@ -1,7 +1,14 @@
 import Image from "next/image";
+import Registration from "./registration/page";
+import { getCookieInSSR } from "@/utils/cookies/cookiesInSSR";
 import styles from "./page.module.css";
 
 export default function Home() {
+
+  if(!getCookieInSSR('gg_at')){
+    return <Registration/>
+  }
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
