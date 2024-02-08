@@ -24,6 +24,7 @@ pipeline {
         GITHUB_ACCESS_TOKEN = 'github-token'
         FEATURE_BRANCH = "feature/*"
         DEV_BRANCH = "dev"
+        APP_ENV = "dev"
     }
 
     stages {
@@ -33,17 +34,31 @@ pipeline {
                 sh 'printenv'
                 // Variable definition
                 // Testing area
-                // script {
-                //     def awkCommand = '''\
-                //             awk '{print $1}'
-                //         '''
+                script {
+                    def awkCommand = '''\
+                            awk '{print $1}'
+                        '''
+                    //Set env based on branch //
+                    def branchName = env.GIT_BRANCH
+                    // Derive env based on branch
+                    def appEnv = "local" // default port for unknown branches
 
-                // // Statement to explicitly handle container removal via port
-                // echo "Removing old container via port selector in case of new feature branches: 13000"
-                // sh """
-                //     ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP "docker rm -f \$(docker ps | grep 13000 | $awkCommand)" || true
-                // """
-                // }
+                    if (branchName ==~ /.*feature.*/) {
+                        appEnv = "dev"
+                    } else if (branchName ==~ /.*dev.*/) {
+                        appEnv = "uat"
+                    } else if (branchName ==~ /.*master.*/) {
+                        appEnv = "uat"
+                    } else if (branchName ==~ /.*release.*/) {
+                        appEnv = "prod"
+                    }
+                    echo "app env :: $appEnv"
+                // Statement to explicitly handle container removal via port
+                echo "Removing old container via port selector in case of new feature branches: 13000"
+                sh """
+                    ssh -i $SSH_KEY $SERVER_USER@$SERVER_IP "docker rm -f \$(docker ps | grep 13000 | $awkCommand)" || true
+                """
+                }
             }
         }
 
@@ -66,11 +81,24 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Docker Image and Set Env') {
             steps {
                 script {
+                     //Set env based on branch //
+                    def branchName = env.GIT_BRANCH
+                    // Derive env based on branch
+                    def appEnv = "dev" // default env for unknown branches
+                    if (branchName ==~ /.*feature.*/) {
+                        appEnv = "dev"
+                    } else if (branchName ==~ /.*dev.*/) {
+                        appEnv = "uat"
+                    } else if (branchName ==~ /.*master.*/) {
+                        appEnv = "uat"
+                    } else if (branchName ==~ /.*release.*/) {
+                        appEnv = "prod"
+                    }
                     sh 'echo "DOCKER_BUILD_STEP::Building Application $APP_NAME Image Using Docker ..."'
-                    sh "docker build -t $IMAGE_NAME:$DOCKER_IMAGE_TAG ."
+                    sh "docker build --build-arg ENVIRONMENT=$appEnv -t $IMAGE_NAME:$DOCKER_IMAGE_TAG ."
                 }
             }
         }
