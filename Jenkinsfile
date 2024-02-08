@@ -61,7 +61,7 @@ pipeline {
                 script {
                     sh 'echo "BUILD_STEP::Building Application $APP_NAME Using npm ..."'
                     sh 'npm install'
-                    sh 'npm run build'
+                    sh 'npm run build-dev'
                 }
             }
         }

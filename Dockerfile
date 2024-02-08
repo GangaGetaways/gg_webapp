@@ -26,4 +26,4 @@ COPY . .
 EXPOSE 12999
 
 # Command to start the application
-CMD ["npm", "start"]
+CMD ["npm", "start-dev"]
