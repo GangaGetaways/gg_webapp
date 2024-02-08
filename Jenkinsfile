@@ -98,7 +98,7 @@ pipeline {
                         appEnv = "prod"
                     }
                     sh 'echo "DOCKER_BUILD_STEP::Building Application $APP_NAME Image Using Docker ..."'
-                    sh "docker build --build-arg ENVIRONMENT=$appEnv -t $IMAGE_NAME:$DOCKER_IMAGE_TAG ."
+                    sh "docker build --build-arg ENV_TYPE=$appEnv -t $IMAGE_NAME:$DOCKER_IMAGE_TAG ."
                 }
             }
         }

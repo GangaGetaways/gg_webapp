@@ -1,14 +1,15 @@
 #!/bin/bash
+echo "Environment Coming from build step :: $ENV_TYPE"
 
-if [ "$ENVIRONMENT" = "dev" ]; then
+if [ "$ENV_TYPE" = "dev" ]; then
   cp /env/.env.dev .env
-elif [ "$ENVIRONMENT" = "uat" ]; then
+elif [ "$ENV_TYPE" = "uat" ]; then
   cp /env/.env.uat .env
-elif [ "$ENVIRONMENT" = "prod" ]; then
+elif [ "$ENV_TYPE" = "prod" ]; then
   cp /env/.env.prod .env
 else
   echo "Unknown environment"
   exit 1
 fi
 
-echo "Environment Set :: $ENVIRONMENT"
+echo "Environment Set :: $ENV_TYPE"

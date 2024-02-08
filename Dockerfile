@@ -25,12 +25,13 @@ COPY . .
 # Add a script to read the environment name and map the corresponding .env file
 COPY set-env.sh .
 RUN chmod +x set-env.sh
-
-# Run the script to set up environment variables
+# Default arg type
+ARG ENV_TYPE=dev
+# Run the script to set up dynamic environment variables
 RUN ./set-env.sh
 
 # Expose the application port (assuming your Node.js app runs on port 3000)
 EXPOSE 12999
 
-# Command to start the application
-CMD ["npm", "start"]
+# Command to start the application with dynamic environment variables
+CMD ["npm", "start", "--", "cross-env", "ENV_TYPE=${ENV_TYPE}", "next", "dev", "-p", "12999"]
