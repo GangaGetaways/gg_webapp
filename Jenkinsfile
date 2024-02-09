@@ -106,9 +106,9 @@ pipeline {
         stage('Publish to Docker Hub') {
             steps {
                 script {
-                    sh 'echo "DOCKER_PUBLISH_STEP::Pushing Docker $APP_NAME image to Docker Hub ..."'
+                    sh 'echo "DOCKER_PUBLISH_STEP::Pushing Docker $APP_NAME image $IMAGE_NAME:$DOCKER_IMAGE_TAG to Docker Hub ..."'
                     docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                        sh "docker push $IMAGE_NAME"
+                        sh "docker push $IMAGE_NAME:$DOCKER_IMAGE_TAG"
                     }
                 }
             }
