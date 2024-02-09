@@ -14,5 +14,5 @@ else
   echo "Unknown environment :: $ENV_TYPE"
   exit 1
 fi
-
+export ENV_TYPE=$ENV_TYPE
 echo "Environment Set :: $ENV_TYPE"
