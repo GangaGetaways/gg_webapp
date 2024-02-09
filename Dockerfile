@@ -34,4 +34,4 @@ RUN ./set-env.sh
 EXPOSE 12999
 
 # Command to start the application with dynamic environment variables
-CMD ["npm", "start", "--", "cross-env", "ENV_TYPE=${ENV_TYPE}", "next", "dev", "-p", "12999"]
+CMD ["npm", "start"]
