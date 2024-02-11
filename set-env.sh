@@ -3,7 +3,7 @@ echo "Environment Coming from build step :: $ENV_TYPE"
 #Only for local runs.
 #ENV_TYPE="local" # for local --
 # Default env
-ENV_TYPE="dev"
+#ENV_TYPE="dev"
 # Get the current working directory
 cwd=$(pwd)
 echo "Current working dir :: $cwd"
