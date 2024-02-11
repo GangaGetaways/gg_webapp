@@ -17,7 +17,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install application dependencies
-RUN npm install
+RUN npm install --verbose
 
 # Copy the rest of the application code
 COPY . .
@@ -30,7 +30,7 @@ ARG ENV_TYPE=dev
 # Run the script to set up dynamic environment variables
 RUN ./set-env.sh
 
-# Expose the application port (assuming your Node.js app runs on port 3000)
+# Expose the application port (assuming your Node.js app runs on port 13000)
 EXPOSE 12999
 
 # Command to start the application with dynamic environment variables
