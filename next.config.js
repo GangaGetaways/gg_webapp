@@ -1,14 +1,36 @@
-const dotenv = require('dotenv');
-const path = require('path');
+const dotenv = require("dotenv");
 
-const envPath = path.resolve('env', `.env.${process.env.ENV_TYPE}`);
-const envConfig = dotenv.config({ path: envPath }).parsed;
+const envConfig = dotenv.config({ path: ".env" }).parsed;
 
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-    env: {
-        ...envConfig
-    }
+  env: {
+    ...envConfig,
+  },
+  source: "/v1/:path*",
+  async headers() {
+    return [
+      {
+        // matching all API routes
+        source: "/v1/:path*",
+        headers: [
+          { key: "Access-Control-Allow-Credentials", value: "true" },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "http://localhost:12999",
+          },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET,OPTIONS,PATCH,DELETE,POST,PUT,OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value:
+              "Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+          },
+        ],
+      },
+    ];
+  },
 };
 
-module.exports= nextConfig;
+module.exports = nextConfig;
