@@ -1,7 +1,9 @@
 const dotenv = require("dotenv");
 
 const envConfig = dotenv.config({ path: ".env" }).parsed;
-
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
   env: {
     ...envConfig,
