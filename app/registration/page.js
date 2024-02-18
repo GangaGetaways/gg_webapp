@@ -50,6 +50,15 @@ const Registration = () => {
     [formData["password"]]
   );
 
+  const IsInvalidPhone = useMemo(
+    () => {
+      const phoneNo= formData["phoneNumber"] || "";
+      if (phoneNo === "") return false;
+      return !phoneNo.match(/^\d{10}$/);
+    },
+    [formData["phoneNumber"]]
+  );
+
   return (
     <form className={Styles["gg_reg_cont"]} onSubmit={handleRegisteration}>
       <header className={Styles["ggrc-heading"]}>Ganga Getaways</header>
@@ -59,6 +68,7 @@ const Registration = () => {
         type="text"
         placeholder="Enter your name"
         maxLength="35"
+        pattern="^[A-Za-z ]*$"
         isRequired
         errorMessage={IsInvalidName && "Please enter a valid name"}
         onChange={(e) => handleChange(e, "name")}
@@ -86,11 +96,10 @@ const Registration = () => {
         className={Styles["ggrc-input"]}
         label="Phone number"
         type="text"
-        pattern="\d*"
-        value={formData["phoneNumber"]}
+        pattern="^\d{10}$"
         placeholder="Enter your phone number"
-        maxLength="10"
         isRequired
+        errorMessage={IsInvalidPhone && "Please enter a 10 digit phone number"}
         onChange={(e) => handleChange(e, "phoneNumber")}
       />
       <Button type="submit" className={Styles["ggrc-reg-btn"]} color="primary">

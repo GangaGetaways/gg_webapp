@@ -6,7 +6,6 @@ const nextConfig = {
   env: {
     ...envConfig,
   },
-  source: "/v1/:path*",
   async headers() {
     return [
       {
