@@ -13,7 +13,7 @@ const Registration = () => {
   const handleChange = (e, field) => {
     setFormData({
       ...formData,
-      [field]: e.target.value,
+      [field]: e.target.value?.trim(),
     });
   };
 
@@ -36,7 +36,7 @@ const Registration = () => {
     () => {
       const name= formData["name"] || "";
       if (name === "") return false;
-      return !name.match(/^[A-Za-z]*$/);
+      return !name.match(/^[A-Za-z ]*$/);
     },
     [formData["name"]]
   );
