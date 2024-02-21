@@ -18,6 +18,7 @@ const Registration = () => {
   };
 
   const handleRegisteration = (e) => {
+    e.preventDefault();
     postRegisterUser(formData, () => {
       router.replace("/homepage");
     });
